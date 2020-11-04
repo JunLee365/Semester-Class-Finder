@@ -96,8 +96,7 @@ function writeSearch(req, res){
     }
     // days
     else if (filter == "day"){
-        sql = `SELECT * FROM courses WHERE Days LIKE '%` + search + `%'
-        ORDER BY StartTimeInternal;`;
+        sql = `SELECT * FROM courses WHERE Days LIKE '%` + search + `%' ORDER BY StartTime;`;
     }
     // course times
     else if (filter == "time"){
@@ -219,7 +218,6 @@ function getDay(SQLResult, tableHeader){
 }
 
 function constructSQLDayCommand(search) {
-    var sql = `SELECT * FROM saved
-    WHERE Days like '%` + search + `%' ORdER BY StartTimeInternal;`;
+    var sql = `SELECT * FROM saved WHERE Days like '%` + search + `%' ORDER BY StartTime;`;
     return sql;
 };
