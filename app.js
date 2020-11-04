@@ -161,16 +161,16 @@ function writeSchedule(req, res) {
             <tr>
                 <th> Mon </th>
                 <th> Tues </th>
-                <th> Wed</th>
-                <th> Thurs</th>
-                <th> Fri</th>
+                <th> Wed </th>
+                <th> Thurs </th>
+                <th> Fri </th>
             </tr>
             <tr>
                 <th> Mon </th>
                 <th> Tues </th>
-                <th> Wed</th>
-                <th> Thurs</th>
-                <th> Fri</th>
+                <th> Wed </th>
+                <th> Thurs </th>
+                <th> Fri </th>
             </tr>
         </table>
     </body>
