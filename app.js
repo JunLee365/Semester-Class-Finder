@@ -205,7 +205,7 @@ function writeSchedule(req, res) {
 
 function getDay(SQLResult, tableHeader){
     let retStr = "<td>";
-    for (let iten of SQLResult){
+    for (let item of SQLResult){
         retStr += "\n <b>" + item.StartTime + ` - ` +
         item.EndTime + `<br><br>` +
         item.Subject + " " +
