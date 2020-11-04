@@ -21,11 +21,10 @@ app.get("/schedule", (req, res) =>{
 
 port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log("server.started!");
+    console.log("server started!");
 });
 
 function writeSearch(req, res){
-
         res.writeHead(200, {"Content-Type": "text/html"});
         let query = url.parse(req.url, true).query;
 
@@ -160,17 +159,17 @@ function writeSchedule(req, res) {
         <table>
             <tr>
                 <th> Mon </th>
-                <th> Tues </th>
+                <th> Tue </th>
                 <th> Wed </th>
-                <th> Thurs </th>
+                <th> Thu </th>
                 <th> Fri </th>
             </tr>
             <tr>
-                <th> Mon </th>
-                <th> Tues </th>
-                <th> Wed </th>
-                <th> Thurs </th>
-                <th> Fri </th>
+                <td> Mon </td>
+                <td> Tue </td>
+                <td> Wed </td>
+                <td> Thu </td>
+                <td> Fri </td>
             </tr>
         </table>
     </body>
