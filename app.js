@@ -7,6 +7,22 @@ var con = mysql.createConnection({
     database: "hw4"
 });
 
+con.connect(function(err) {
+    if (err) throw err;
+    var sql = `DROP TABLE IF EXISTS saved;`;
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("Table deleted");
+        sql =`CREATE TABLE saved SELECT * FROM courses LIMIT 0;`;
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("Table created");
+        });
+    });
+
+    
+  });
+
 const express = require("express"); // Use Express 
 const app = express();
 const url = require('url');
@@ -36,10 +52,28 @@ function writeSearch(req, res){
         <html lang = "en">
             <head>
                 <title>CSE Class Find</title>
+                <style>
+                    body{
+                        background-color: rgb(255, 245, 240);
+                        font-family: Arial, Helvetica, sans-serif;
+                    }
+                    table{
+                        background-color: gray;
+                        width: 100%;
+                    }
+                    table td{
+                        background-color: rgb(255, 229, 212);
+                        text-align: left;
+                    }
+                    table div{
+                        border-bottom: 1px solid black;
+                        padding: 3px;
+                    }
+                </style>
             </head>
 
             <body>
-                <h1>CSE Class Find</h1><br>
+                <h1>CSE Class Find</h1>
                 <form method = "get" action = "/">
                     <input type = "text" name = "search" value = "">
                     <b>in</b>
@@ -51,13 +85,13 @@ function writeSearch(req, res){
                         <option value = "day">Day</option>
                         <option value = "time">Time</option>
                     </select>
-                    <input type = "submit" value = "Submit">
-                    <br>
-                    Example searches: 316, Fodor, 2:30 PM, MW
+                    <input type = "submit" value = "Submit"><br><br>
+                    Example searches: 316, Fodor, 2:30 PM, MW <br><br>
+                    <a href = "/schedule"><b>Check Schedule</b><a><br>
                 </form>
-                <br><br>`; //        </body>    </html>
+                <br>`; 
 
-    let sql = "SELECT * FROM courses;"
+    let sql = `SELECT * FROM courses;`;
 
     // sql to search all columns
     if(filter == "allFields"){
@@ -110,21 +144,17 @@ function writeSearch(req, res){
             <button type = "button" class="toggle"> CSE ` + item.Course + ` - ` +
             item.CourseName + ` - ` + item.Component + ` - Section ` + item.Section + `</button>
             <pre>
-                Days:` + item.Days + `
-                Start Time:` + item.StartTime + `
-                End Time:` + item.EndTime + `
-                Start Date:` + item.StartDate + `
-                End Date:` + item.EndDate + `
-                Duration:` + item.Duration + `
-                Instruction Mode:` + item.InstructionMode + `
-                Building:` + item.Building + `
-                Room:` + item.Room + `
-                Instructor:` + item.Instructor + `
-                Enrollment Cap:` + item.EnrollCap + `
-                Wait Cap:` + item.WaitCap + `
-                Combined Description:` + item.CombDesc + `
-                Combined Enrollment Cap:` + item.CombEnrollCap + `<form action ="/schedule" method = "get">
-                <button name = "add" value="` + item.id + `"> Add Class </button></form></pre>`;
+    Days: ` + item.Days + `
+    Start Time: ` + item.StartTime + `\t End Time:` + item.EndTime + `
+    Start Date: ` + item.StartDate + `\t End Date:` + item.EndDate + `
+    Duration: ` + item.Duration + `\t\t Instruction Mode: ` + item.InstructionMode + `
+    Building: ` + item.Building + `
+    Room: ` + item.Room + `
+    Instructor: ` + item.Instructor + `
+    Enrollment Cap: ` + item.EnrollCap + `\t Wait Cap: ` + item.WaitCap + `
+    Combined Description: ` + item.CombDesc + `
+    Combined Enrollment Cap: ` + item.CombEnrollCap + `<form action ="/schedule" method = "get">
+    <button name = "add" value="` + item.id + `"> Add Class </button></form></pre>`;
         }
         res.write(html + "\n\n</body>\n<\html>")
         res.end();
@@ -142,17 +172,32 @@ function writeSchedule(req, res) {
         <head>
             <title> Schedule </title>
             <style type = text/css>
-                table, te, th, td {
-                    border: 1px solid black;
-                    height: 50px;
-                    vertical-align: bottom;
-                    padding: 15px;
-                    text-align: left;
-                }
+            body{
+                background-color:  rgb(255, 245, 240);
+            }
+            table{
+                background-color: gray;
+            }
+            table, p, h1, a{
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            table th{
+                background-color: rgb(255, 212, 160);
+                text-align: center;
+                font-size: 18px;
+                padding: 3px;
+                width: 180px;
+            }
+            table td{
+                background-color: rgb(212, 245, 255);
+                text-align: left;
+                border-bottom: 1px solid black;
+                padding: 3px;
+            }
             </style>
         </head>
     <body>
-        <h1> Schedule </h1><br>
+        <h1> Schedule </h1>
         <a href = "/"><b>Return to Search</b><a>
         <br><br>
 
@@ -186,7 +231,7 @@ function writeSchedule(req, res) {
                 con.query(constructSQLDayCommand("W"), function(err, result){
                     if(err) throw err;
                     html = html.replace("<td> Wed </td>", getDay(result, "WED"));
-                    con.query(constructSQLDayCommand("TU"), function(err, result){
+                    con.query(constructSQLDayCommand("TH"), function(err, result){
                         if(err) throw err;
                         html = html.replace("<td> Thu </td>", getDay(result, "THU"));
                         con.query(constructSQLDayCommand("F"), function(err, result){
@@ -206,7 +251,7 @@ function getDay(SQLResult, tableHeader){
     let retStr = "<td>";
     for (let item of SQLResult){
         retStr += "\n <b>" + item.StartTime + ` - ` +
-        item.EndTime + `<br><br>` +
+        item.EndTime + `<br>` +
         item.Subject + " " +
         item.Course + "-" +
         item.Section + ` </b><p> ` +
