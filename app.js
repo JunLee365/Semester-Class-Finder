@@ -59,7 +59,7 @@ function writeSearch(req, res){
             <head>
                 <title>CSE Class Find</title>
                 <style>
-                    body{
+                    body, pre{
                         background-color: rgb(255, 245, 240);
                         font-family: Arial, Helvetica, sans-serif;
                     }
@@ -80,7 +80,7 @@ function writeSearch(req, res){
 
             <body>
                 <h1>CSE Class Find</h1>
-                <form method = "get" action = "/">
+                <form method = "get" action = "/"> <b>Search</b>
                     <input type = "text" name = "search" value = "">
                     <b>in</b>
                     <select name = "filter">
@@ -93,7 +93,7 @@ function writeSearch(req, res){
                     </select>
                     <input type = "submit" value = "Submit"><br><br>
                     Example searches: 316, Fodor, 2:30 PM, MW <br><br>
-                    <a href = "/schedule"><b>Check Schedule</b><a><br>
+                    <a href = "/schedule"><b>Check generated schedule</b><a><br>
                 </form>
                 <br>`; 
 
@@ -147,9 +147,10 @@ function writeSearch(req, res){
         if(err) throw err;
         for (let item of result) {
             html += `
-            <button type = "button" class="toggle"> CSE ` + item.Course + ` - ` +
-            item.CourseName + ` - ` + item.Component + ` - Section ` + item.Section + `</button>
-            <pre>
+            <form action ="/schedule" method = "get">
+            <button name = "add" value="` + item.id + `"> Add CSE ` + item.Course + ` - ` + item.CourseName + ` - ` + item.Component + ` - Section ` + item.Section + `</button>
+            </form>
+    <pre>
     Days: ` + item.Days + `
     Start Time: ` + item.StartTime + `\t End Time:` + item.EndTime + `
     Start Date: ` + item.StartDate + `\t End Date:` + item.EndDate + `
@@ -159,8 +160,7 @@ function writeSearch(req, res){
     Instructor: ` + item.Instructor + `
     Enrollment Cap: ` + item.EnrollCap + `\t Wait Cap: ` + item.WaitCap + `
     Combined Description: ` + item.CombDesc + `
-    Combined Enrollment Cap: ` + item.CombEnrollCap + `<form action ="/schedule" method = "get">
-    <button name = "add" value="` + item.id + `"> Add Class </button></form></pre>`;
+    Combined Enrollment Cap: ` + item.CombEnrollCap + `</pre>`;
         }
         res.write(html + "\n\n</body>\n<\html>")
         res.end();
@@ -177,7 +177,7 @@ function writeSchedule(req, res) {
         <!DOCTYPE html>
         <html>
         <head>
-            <title> Schedule </title>
+            <title> Generated Schedule </title>
             <style type = text/css>
             body{
                 background-color:  rgb(255, 245, 240);
@@ -204,16 +204,16 @@ function writeSchedule(req, res) {
             </style>
         </head>
     <body>
-        <h1> Schedule </h1>
+        <h1> Generated Schedule </h1>
         <a href = "/"><b>Return to Search</b><a>
         <br><br>
 
         <table>
             <tr>
                 <th> Mon </th>
-                <th> Tue </th>
+                <th> Tues </th>
                 <th> Wed </th>
-                <th> Thu </th>
+                <th> Thur </th>
                 <th> Fri </th>
             </tr>
             <tr>
