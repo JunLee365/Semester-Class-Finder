@@ -6,7 +6,11 @@ var con = mysql.createConnection({
     password: "365365365jJkK;",
     database: "hw4"
 });
+// Classes table: list of classes
+// saved table: list iof saved classes on schedule
 
+
+// on connection, SQL script is used to automatically remake the saved table
 con.connect(function(err) {
     if (err) throw err;
     var sql = `DROP TABLE IF EXISTS saved;`;
@@ -19,18 +23,19 @@ con.connect(function(err) {
             console.log("Table created");
         });
     });
+});
 
-    
-  });
-
+// Use express to read the URL
 const express = require("express"); // Use Express 
 const app = express();
 const url = require('url');
 
+// default: when on the main page adding classes
 app.get("/", (req, res) => {
     writeSearch(req, res);
 });
 
+// schedule page: shows the schedulw made
 app.get("/schedule", (req, res) =>{
     writeSchedule(req, res);
 });
@@ -40,6 +45,7 @@ app.listen(port, () => {
     console.log("server started!");
 });
 
+// function triggered when user is at the main page adding classes
 function writeSearch(req, res){
         res.writeHead(200, {"Content-Type": "text/html"});
         let query = url.parse(req.url, true).query;
@@ -162,6 +168,7 @@ function writeSearch(req, res){
 
 };
 
+// function triggered when user is at the schedule page seeing classes added
 function writeSchedule(req, res) {
     let query = url.parse(req.url, true).query;
     let addQuery = `INSERT INTO saved SELECT * FROM courses WHERE courses.id="` + query.add + `";`
@@ -247,6 +254,7 @@ function writeSchedule(req, res) {
     });
 }
 
+// prints the classes for each weekdays on display
 function getDay(SQLResult, tableHeader){
     let retStr = "<td>";
     for (let item of SQLResult){
@@ -261,6 +269,7 @@ function getDay(SQLResult, tableHeader){
     return retStr + "</td>";
 }
 
+// SQL script to get query of classes for each weekdays in ascending order of time
 function constructSQLDayCommand(search) {
     var sql = `SELECT * FROM saved WHERE Days like '%` + search + `%' ORDER BY StartTime;`;
     return sql;
