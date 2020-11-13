@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
     writeSearch(req, res);
 });
 
-// schedule page: shows the schedulw made
+// schedule page: shows the schedule made
 app.get("/schedule", (req, res) =>{
     writeSchedule(req, res);
 });
@@ -60,7 +60,7 @@ function writeSearch(req, res){
                 <title>CSE Class Find</title>
                 <style>
                     body, pre{
-                        background-color: rgb(255, 245, 240);
+                        background-color:  #FFDAC7;
                         font-family: Arial, Helvetica, sans-serif;
                     }
                     table{
@@ -68,7 +68,7 @@ function writeSearch(req, res){
                         width: 100%;
                     }
                     table td{
-                        background-color: rgb(255, 229, 212);
+                        background-color: #C7ECFF;
                         text-align: left;
                     }
                     table div{
@@ -180,7 +180,7 @@ function writeSchedule(req, res) {
             <title> Generated Schedule </title>
             <style type = text/css>
             body{
-                background-color:  rgb(255, 245, 240);
+                background-color: #FFDAC7;
             }
             table{
                 background-color: gray;
@@ -189,14 +189,14 @@ function writeSchedule(req, res) {
                 font-family: Arial, Helvetica, sans-serif;
             }
             table th{
-                background-color: rgb(255, 212, 160);
+                background-color: #FFB894;
                 text-align: center;
                 font-size: 18px;
                 padding: 3px;
                 width: 180px;
             }
             table td{
-                background-color: rgb(212, 245, 255);
+                background-color: #C7ECFF;
                 text-align: left;
                 border-bottom: 1px solid black;
                 padding: 3px;
@@ -271,6 +271,6 @@ function getDay(SQLResult, tableHeader){
 
 // SQL script to get query of classes for each weekdays in ascending order of time
 function constructSQLDayCommand(search) {
-    var sql = `SELECT * FROM saved WHERE Days like '%` + search + `%' ORDER BY StartTime;`;
+    var sql = `SELECT DISTINCT * FROM saved WHERE Days like '%` + search + `%' ORDER BY STR_TO_DATE(StartTime, '%l:%i %p');`;
     return sql;
 };
