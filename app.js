@@ -230,6 +230,7 @@ function writeSchedule(req, res) {
     con.query(addQuery, function(err, result){
         if(err) console.log(err);
         con.query(constructSQLDayCommand("M"), function(err, result){
+
             if(err) throw err;
             html = html.replace("<td> Mon </td>", getDay(result, "MON"));
             con.query(constructSQLDayCommand("TU"), function(err, result){
@@ -254,6 +255,12 @@ function writeSchedule(req, res) {
     });
 }
 
+// SQL script to get query of classes for each weekdays in ascending order of time
+function constructSQLDayCommand(search) {
+    var sql = `SELECT DISTINCT * FROM saved WHERE Days like '%` + search + `%' ORDER BY STR_TO_DATE(StartTime, '%l:%i %p');`;
+    return sql;
+};
+
 // prints the classes for each weekdays on display
 function getDay(SQLResult, tableHeader){
     let retStr = "<td>";
@@ -268,9 +275,3 @@ function getDay(SQLResult, tableHeader){
     }
     return retStr + "</td>";
 }
-
-// SQL script to get query of classes for each weekdays in ascending order of time
-function constructSQLDayCommand(search) {
-    var sql = `SELECT DISTINCT * FROM saved WHERE Days like '%` + search + `%' ORDER BY STR_TO_DATE(StartTime, '%l:%i %p');`;
-    return sql;
-};
